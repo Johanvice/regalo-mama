@@ -11,6 +11,7 @@ body, html {
     width: 100%; height: 100%;
     background-color: var(--negro);
     color: white; overflow: hidden;
+    font-size: 16px;
 }
 
 #canvas { position: absolute; top: 0; left: 0; z-index: 1; }
@@ -22,32 +23,26 @@ body, html {
 
 .welcome-box button {
     background: transparent; color: var(--rosa-floral); border: 2px solid var(--rosa-floral);
-    padding: 18px 35px; font-size: 1.5rem; border-radius: 50px; cursor: pointer;
+    padding: 15px 30px; font-size: 1.2rem; border-radius: 50px; cursor: pointer;
     font-family: 'Dancing Script', cursive;
     box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
-    transition: 0.4s;
 }
 
 .contenedor-principal {
     position: relative; z-index: 10; height: 100vh;
-    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; 
+    text-align: center; padding: 20px;
 }
 
-/* RECUPEADO: Título Superior Original con Cursiva y Brillo */
 .titulo-feliz-dia {
     font-family: 'Dancing Script', cursive;
-    font-size: 4rem;
+    font-size: 3rem;
     color: white;
     text-shadow: 0 0 10px var(--rosa-floral), 0 0 25px var(--rosa-brillante);
     margin-bottom: 10px;
 }
 
-#flower-svg-container { width: 280px; height: 280px; margin-bottom: 10px; }
-
-.stem-path {
-    stroke-dasharray: 100; stroke-dashoffset: 100;
-    transition: stroke-dashoffset 2s ease-in-out;
-}
+#flower-svg-container { width: 250px; height: 250px; }
 
 .petal-geo {
     fill: rgba(255, 20, 147, 0.15);
@@ -58,50 +53,40 @@ body, html {
     transition: all 2.5s ease-out;
 }
 
-#centro-rojo { filter: drop-shadow(0 0 10px red); opacity: 0; transition: opacity 1.5s 3.5s; }
-
-/* Mensaje con Glassmorphism para legibilidad */
 #mensaje {
     background: rgba(5, 5, 5, 0.7);
     backdrop-filter: blur(10px);
-    padding: 30px 40px;
-    border-radius: 25px;
+    padding: 20px;
+    border-radius: 20px;
     border: 1px solid rgba(255, 105, 180, 0.2);
-    max-width: 650px;
+    max-width: 90%;
+    margin-top: 10px;
 }
 
 .texto-brillante {
     font-family: 'Great Vibes', cursive;
-    font-size: 4.2rem;
+    font-size: 2.8rem;
     color: #fff;
     text-shadow: 0 0 15px var(--rosa-brillante);
-    margin-bottom: 15px;
 }
 
 .dedicatoria {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 300;
-    line-height: 1.8;
+    font-size: 1rem;
+    line-height: 1.6;
     color: #f0f0f0;
-    letter-spacing: 0.5px;
 }
 
-.linea-decorativa {
-    width: 80px; height: 1px;
-    background: linear-gradient(to right, transparent, var(--dorado), transparent);
-    margin: 20px auto;
+/* AJUSTES PARA PANTALLAS GRANDES (PC) */
+@media (min-width: 768px) {
+    .titulo-feliz-dia { font-size: 4.5rem; }
+    #flower-svg-container { width: 300px; height: 300px; }
+    .texto-brillante { font-size: 4.2rem; }
+    .dedicatoria { font-size: 1.2rem; }
+    #mensaje { padding: 40px; max-width: 650px; }
 }
 
-.firma {
-    font-family: 'Cinzel', serif;
-    color: var(--dorado);
-    letter-spacing: 5px;
-    font-size: 0.85rem;
-}
-
-/* Animaciones de entrada */
-.oculto { opacity: 0; transform: translateY(30px); filter: blur(5px); transition: all 2.5s ease; }
-.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+.oculto { opacity: 0; transform: translateY(20px); transition: all 2.5s ease; }
+.visible { opacity: 1; transform: translateY(0); }
 .visible .stem-path { stroke-dashoffset: 0; }
 .visible .petal-geo { opacity: 1; }
