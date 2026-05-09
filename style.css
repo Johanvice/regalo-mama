@@ -1,92 +1,87 @@
 :root {
-    --negro: #050505;
-    --rosa-floral: #ff69b4;
-    --rosa-brillante: #ff1493;
-    --dorado: #fcc200;
+    --bg: #000000;
+    --rosa-neon: #ff007f;
+    --oro: #ffd700;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body, html {
     width: 100%; height: 100%;
-    background-color: var(--negro);
+    background: var(--bg);
     color: white; overflow: hidden;
-    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 #canvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
 #overlay {
-    position: fixed; inset: 0; background: var(--negro);
-    z-index: 1000; display: flex; justify-content: center; align-items: center;
+    position: fixed; inset: 0; background: #000;
+    z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+
+.heart-loader {
+    width: 40px; height: 40px; background: var(--rosa-neon);
+    transform: rotate(45deg); animation: heartbeat 1.2s infinite;
+    margin-bottom: 30px; box-shadow: 0 0 25px var(--rosa-neon);
+}
+.heart-loader::before, .heart-loader::after {
+    content: ''; width: 40px; height: 40px; background: var(--rosa-neon);
+    border-radius: 50%; position: absolute;
+}
+.heart-loader::before { left: -20px; }
+.heart-loader::after { top: -20px; }
+
+@keyframes heartbeat {
+    0%, 100% { transform: rotate(45deg) scale(0.8); }
+    30% { transform: rotate(45deg) scale(1.1); }
 }
 
 .welcome-box button {
-    background: transparent; color: var(--rosa-floral); border: 2px solid var(--rosa-floral);
-    padding: 15px 30px; font-size: 1.2rem; border-radius: 50px; cursor: pointer;
-    font-family: 'Dancing Script', cursive;
-    box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
+    background: none; color: white; border: 2px solid var(--rosa-neon);
+    padding: 12px 25px; font-size: 1rem; border-radius: 30px;
+    letter-spacing: 2px; box-shadow: 0 0 15px var(--rosa-neon);
 }
 
 .contenedor-principal {
     position: relative; z-index: 10; height: 100vh;
-    display: flex; flex-direction: column; justify-content: center; align-items: center; 
-    text-align: center; padding: 20px;
+    display: flex; flex-direction: column;
+    justify-content: space-between; /* Separa título, flor y mensaje */
+    align-items: center; 
+    padding: 50px 20px 30px; /* Ajuste para que el mensaje no quede tan abajo */
+    pointer-events: none;
 }
 
 .titulo-feliz-dia {
-    font-family: 'Dancing Script', cursive;
-    font-size: 3rem;
-    color: white;
-    text-shadow: 0 0 10px var(--rosa-floral), 0 0 25px var(--rosa-brillante);
-    margin-bottom: 10px;
+    font-family: 'Dancing Script', cursive; font-size: 2.8rem;
+    color: white; text-shadow: 0 0 20px var(--rosa-neon);
 }
 
-#flower-svg-container { width: 250px; height: 250px; }
-
-.petal-geo {
-    fill: rgba(255, 20, 147, 0.15);
-    stroke: var(--rosa-floral);
-    stroke-width: 0.3;
-    transform-origin: 100px 100px;
-    opacity: 0;
-    transition: all 2.5s ease-out;
-}
+.espacio-flor { height: 35vh; width: 100%; } /* Reserva el espacio para que la flor se vea clara */
 
 #mensaje {
-    background: rgba(5, 5, 5, 0.7);
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 105, 180, 0.2);
-    max-width: 90%;
-    margin-top: 10px;
+    background: rgba(10, 0, 5, 0.7);
+    backdrop-filter: blur(12px); padding: 20px;
+    border-radius: 20px; border: 1.5px solid var(--rosa-neon);
+    width: 100%; max-width: 400px;
+    box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
 }
 
 .texto-brillante {
-    font-family: 'Great Vibes', cursive;
-    font-size: 2.8rem;
-    color: #fff;
-    text-shadow: 0 0 15px var(--rosa-brillante);
+    font-family: 'Great Vibes', cursive; font-size: 2.5rem;
+    text-shadow: 0 0 15px var(--rosa-neon);
+    margin-bottom: 8px;
 }
 
-.dedicatoria {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #f0f0f0;
+.dedicatoria { 
+    font-size: 0.95rem; line-height: 1.5; margin: 10px 0; font-weight: 300; 
+    color: #ffeef5;
 }
+.dedicatoria strong { color: var(--rosa-neon); }
 
-/* AJUSTES PARA PANTALLAS GRANDES (PC) */
-@media (min-width: 768px) {
-    .titulo-feliz-dia { font-size: 4.5rem; }
-    #flower-svg-container { width: 300px; height: 300px; }
-    .texto-brillante { font-size: 4.2rem; }
-    .dedicatoria { font-size: 1.2rem; }
-    #mensaje { padding: 40px; max-width: 650px; }
-}
+.glow-line { width: 50px; height: 2px; background: var(--oro); margin: 12px auto; }
+.firma { color: var(--oro); font-weight: 600; font-size: 0.8rem; letter-spacing: 3px; }
+.firma strong { font-size: 1rem; text-shadow: 0 0 5px var(--oro); }
 
-.oculto { opacity: 0; transform: translateY(20px); transition: all 2.5s ease; }
+.oculto { opacity: 0; transform: translateY(20px); transition: 3.5s ease; }
 .visible { opacity: 1; transform: translateY(0); }
-.visible .stem-path { stroke-dashoffset: 0; }
-.visible .petal-geo { opacity: 1; }
