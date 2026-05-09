@@ -1,52 +1,116 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+let shootingStars = [];
+let backgroundStars = [];
+let flowerProgress = 0;
 
-let estrellas = [], meteoritos = [];
+function init() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', init);
+init();
 
 function comenzar() {
     document.getElementById('overlay').style.display = 'none';
     const musica = document.getElementById('musica');
     musica.volume = 0.6;
-    musica.play().catch(e => console.log("Audio bloqueado"));
-
-    const container = document.getElementById('petals-layer');
-    for(let i = 0; i < 18; i++) {
-        const petal = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
-        petal.setAttribute("cx", "100"); petal.setAttribute("cy", "75");
-        petal.setAttribute("rx", "18"); petal.setAttribute("ry", "46");
-        petal.classList.add("petal-geo");
-        petal.style.transform = `rotate(${i * 20}deg)`;
-        petal.style.transitionDelay = `${(i * 0.1) + 1.2}s`;
-        container.appendChild(petal);
-    }
-
+    musica.play();
+    
     document.getElementById('titulo-superior').classList.add('visible');
-    document.getElementById('flower-svg-container').classList.add('visible');
+    
+    // El mensaje aparece un poco después para dar protagonismo a la flor
     setTimeout(() => document.getElementById('mensaje').classList.add('visible'), 5000);
 
-    crearEspacio(); animarEspacio();
+    createBackgroundStars();
+    animate();
 }
 
-function crearEspacio() {
-    for(let i=0; i<100; i++) estrellas.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*1.2});
-    for(let i=0; i<2; i++) meteoritos.push(nuevoMeteorito());
+function createBackgroundStars() {
+    for (let i = 0; i < 100; i++) {
+        backgroundStars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            v: Math.random() * 0.4 + 0.1,
+            blink: Math.random() * 0.05
+        });
+    }
 }
 
-function nuevoMeteorito() {
-    return { x: Math.random()*canvas.width, y: 0, len: Math.random()*80+40, v: Math.random()*10+5, o: 1 };
-}
+function drawShootingStars() {
+    if (Math.random() < 0.04) {
+        shootingStars.push({
+            x: Math.random() * canvas.width,
+            y: 0,
+            len: Math.random() * 70 + 40,
+            v: Math.random() * 9 + 4,
+            o: 1
+        });
+    }
 
-function animarEspacio() {
-    ctx.fillStyle = 'black'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "white";
-    estrellas.forEach(e => { ctx.beginPath(); ctx.arc(e.x, e.y, e.s, 0, Math.PI*2); ctx.fill(); });
-    meteoritos.forEach((m, i) => {
-        ctx.strokeStyle = `rgba(255,255,255,${m.o})`; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(m.x + m.len, m.y - m.len); ctx.stroke();
-        m.x -= m.v; m.y += m.v; m.o -= 0.02;
-        if(m.o <= 0) meteoritos[i] = nuevoMeteorito();
+    shootingStars.forEach((p, i) => {
+        ctx.strokeStyle = `rgba(255, 0, 127, ${p.o})`; // ROSA NEÓN
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x + p.len, p.y - p.len);
+        ctx.stroke();
+        p.x -= p.v; p.y += p.v; p.o -= 0.012;
+        if (p.o <= 0) shootingStars.splice(i, 1);
     });
-    requestAnimationFrame(animarEspacio);
+}
+
+function drawFlower() {
+    if (flowerProgress < 1) flowerProgress += 0.005;
+
+    const centerX = canvas.width / 2;
+    // AJUSTE EXPERTO: Subimos la flor para que no la tape el mensaje
+    const centerY = canvas.height * 0.38; 
+    const petals = 14;
+    // AJUSTE EXPERTO: Reducimos el radio un poco para celulares
+    const radius = Math.min(canvas.width, canvas.height) * 0.26 * flowerProgress;
+
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(Date.now() * 0.0004);
+
+    for (let j = 0; j < 4; j++) {
+        ctx.rotate(Math.PI / petals);
+        for (let i = 0; i < petals; i++) {
+            ctx.rotate((Math.PI * 2) / petals);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.quadraticCurveTo(radius / 2, -radius / (2.5 + j), radius, 0);
+            ctx.quadraticCurveTo(radius / 2, radius / (2.5 + j), 0, 0);
+            
+            ctx.strokeStyle = `rgba(255, 0, 127, ${0.85 - j * 0.15})`;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.fillStyle = `rgba(255, 20, 147, ${0.08 - j * 0.01})`;
+            ctx.fill();
+        }
+    }
+    ctx.restore();
+}
+
+function animate() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    backgroundStars.forEach(s => {
+        let opacity = Math.abs(Math.sin(Date.now() * s.blink)) * 0.6 + 0.4;
+        ctx.fillStyle = `rgba(255, 102, 178, ${opacity})`; // ESTRELLAS ROSAS
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+        s.y -= s.v;
+        if (s.y < 0) s.y = canvas.height;
+    });
+
+    drawShootingStars();
+    drawFlower();
+
+    requestAnimationFrame(animate);
 }
