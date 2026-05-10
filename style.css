@@ -25,12 +25,6 @@ body, html {
     transform: rotate(45deg); animation: heartbeat 1.2s infinite;
     margin-bottom: 30px; box-shadow: 0 0 25px var(--rosa-neon);
 }
-.heart-loader::before, .heart-loader::after {
-    content: ''; width: 40px; height: 40px; background: var(--rosa-neon);
-    border-radius: 50%; position: absolute;
-}
-.heart-loader::before { left: -20px; }
-.heart-loader::after { top: -20px; }
 
 @keyframes heartbeat {
     0%, 100% { transform: rotate(45deg) scale(0.8); }
@@ -39,16 +33,15 @@ body, html {
 
 .welcome-box button {
     background: none; color: white; border: 2px solid var(--rosa-neon);
-    padding: 12px 25px; font-size: 1rem; border-radius: 30px;
-    letter-spacing: 2px; box-shadow: 0 0 15px var(--rosa-neon);
+    padding: 12px 25px; border-radius: 30px; box-shadow: 0 0 15px var(--rosa-neon);
 }
 
 .contenedor-principal {
     position: relative; z-index: 10; height: 100vh;
     display: flex; flex-direction: column;
-    justify-content: space-between; /* Separa título, flor y mensaje */
+    justify-content: flex-start; 
     align-items: center; 
-    padding: 50px 20px 30px; /* Ajuste para que el mensaje no quede tan abajo */
+    padding: 40px 20px 80px; /* Aumenté el padding inferior para subir el mensaje */
     pointer-events: none;
 }
 
@@ -57,7 +50,7 @@ body, html {
     color: white; text-shadow: 0 0 20px var(--rosa-neon);
 }
 
-.espacio-flor { height: 35vh; width: 100%; } /* Reserva el espacio para que la flor se vea clara */
+.espacio-flor { height: 32vh; width: 100%; } /* Espacio para la flor pequeña */
 
 #mensaje {
     background: rgba(10, 0, 5, 0.7);
@@ -65,23 +58,26 @@ body, html {
     border-radius: 20px; border: 1.5px solid var(--rosa-neon);
     width: 100%; max-width: 400px;
     box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+    animation: pulse-glow 3s infinite ease-in-out; /* Nueva animación de pulso */
+    margin-top: auto; /* Empuja el mensaje hacia arriba desde el fondo */
+    margin-bottom: 20px; /* Asegura que no toque el borde inferior del navegador */
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(255, 0, 127, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); border-color: white; }
 }
 
 .texto-brillante {
-    font-family: 'Great Vibes', cursive; font-size: 2.5rem;
+    font-family: 'Great Vibes', cursive; font-size: 2.4rem;
     text-shadow: 0 0 15px var(--rosa-neon);
-    margin-bottom: 8px;
 }
 
-.dedicatoria { 
-    font-size: 0.95rem; line-height: 1.5; margin: 10px 0; font-weight: 300; 
-    color: #ffeef5;
-}
-.dedicatoria strong { color: var(--rosa-neon); }
+.dedicatoria { font-size: 0.9rem; line-height: 1.4; color: #ffeef5; }
 
-.glow-line { width: 50px; height: 2px; background: var(--oro); margin: 12px auto; }
-.firma { color: var(--oro); font-weight: 600; font-size: 0.8rem; letter-spacing: 3px; }
-.firma strong { font-size: 1rem; text-shadow: 0 0 5px var(--oro); }
+.glow-line { width: 50px; height: 2px; background: var(--oro); margin: 10px auto; }
 
-.oculto { opacity: 0; transform: translateY(20px); transition: 3.5s ease; }
+.firma { color: var(--oro); font-weight: 600; font-size: 0.85rem; letter-spacing: 2px; }
+
+.oculto { opacity: 0; transform: translateY(30px); transition: 3.5s ease; }
 .visible { opacity: 1; transform: translateY(0); }
